@@ -2,7 +2,7 @@
 #include <string>
 #include "productstore.h"
 
-void showProducts(const productstore& store) {
+void showProducts(const ProductStore& store) {
     const auto& products = store.list();
 
     if (products.empty()) {
@@ -19,7 +19,7 @@ void showProducts(const productstore& store) {
     }
 }
 
-void addProduct(productstore& store) {
+void addProduct(ProductStore& store) {
     std::string id, name, location;
     int quantity;
 
@@ -36,7 +36,7 @@ void addProduct(productstore& store) {
     std::cout << "Enter Location: ";
     std::getline(std::cin, location);
 
-    product p(id, name, quantity, location);
+    Product p(id, name, quantity, location);
 
     if (!store.addProduct(p)) {
         std::cout << "Product with this ID already exists.\n";
@@ -47,7 +47,7 @@ void addProduct(productstore& store) {
 }
 
 int main() {
-    productstore store;
+    ProductStore store;
     store.loadFromFile("data/products.csv");
 
     while (true) {
