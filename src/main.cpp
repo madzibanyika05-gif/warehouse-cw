@@ -46,6 +46,20 @@ void addProduct(ProductStore& store) {
     }
 }
 
+void deleteProduct(ProductStore& store) {
+    std::string id;
+
+    std::cout << "Enter Product ID to delete: ";
+    std::getline(std::cin, id);
+
+    if (store.removeProduct(id)) {
+        store.saveToFile("data/products.csv");
+        std::cout << "Product deleted successfully.\n";
+    } else {
+        std::cout << "Product not found.\n";
+    }
+}
+
 int main() {
     ProductStore store;
     store.loadFromFile("data/products.csv");
@@ -54,7 +68,8 @@ int main() {
         std::cout << "\nWarehouse Inventory System\n";
         std::cout << "1. View Products\n";
         std::cout << "2. Add Product\n";
-        std::cout << "3. Exit\n";
+        std::cout << "3. Delete Product\n";
+        std::cout << "4. Exit\n";
         std::cout << "Choice: ";
 
         int choice;
@@ -68,6 +83,9 @@ int main() {
             addProduct(store);
         }
         else if (choice == 3) {
+            deleteProduct(store);
+        }
+        else if (choice == 4) {
             break;
         }
         else {

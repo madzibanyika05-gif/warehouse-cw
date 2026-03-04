@@ -17,6 +17,16 @@ const std::vector<Product>& ProductStore::list() const {
     return products;
 }
 
+bool ProductStore::removeProduct(const std::string& id) {
+    for (auto it = products.begin(); it != products.end(); ++it) {
+        if (it->getId() == id) {
+            products.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
 void ProductStore::loadFromFile(const std::string& filename) {
     products.clear();
 

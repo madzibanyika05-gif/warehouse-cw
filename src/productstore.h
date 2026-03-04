@@ -12,6 +12,7 @@ private:
 public:
     bool addProduct(const Product& p);
     const std::vector<Product>& list() const;
+    bool removeProduct(const std::string& id);
 
     void loadFromFile(const std::string& filename);
     void saveToFile(const std::string& filename) const;
