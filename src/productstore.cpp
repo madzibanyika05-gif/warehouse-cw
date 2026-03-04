@@ -27,6 +27,19 @@ bool ProductStore::removeProduct(const std::string& id) {
     return false;
 }
 
+bool ProductStore::updateProduct(const std::string& id,
+                                 const std::string& name,
+                                 int quantity,
+                                 const std::string& location) {
+    for (auto& p : products) {
+        if (p.getId() == id) {
+            p = Product(id, name, quantity, location);
+            return true;
+        }
+    }
+    return false;
+}
+
 void ProductStore::loadFromFile(const std::string& filename) {
     products.clear();
 
