@@ -40,6 +40,18 @@ bool ProductStore::updateProduct(const std::string& id,
     return false;
 }
 
+std::vector<Product> ProductStore::searchProducts(const std::string& term) const {
+    std::vector<Product> matches;
+
+    for (const auto& p : products) {
+        if (p.getId() == term || p.getName().find(term) != std::string::npos) {
+            matches.push_back(p);
+        }
+    }
+
+    return matches;
+}
+
 void ProductStore::loadFromFile(const std::string& filename) {
     products.clear();
 
