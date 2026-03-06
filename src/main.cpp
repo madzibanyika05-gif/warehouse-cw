@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "productstore.h"
 
 void showProducts(const ProductStore& store) {
@@ -85,6 +86,28 @@ void editProduct(ProductStore& store) {
     }
 }
 
+void searchProduct(const ProductStore& store) {
+    std::string term;
+    std::cout << "Enter Product ID or Name to search: ";
+    std::getline(std::cin, term);
+
+    std::vector<Product> results = store.searchProducts(term);
+
+    if (results.empty()) {
+        std::cout << "No matching products found.\n";
+        return;
+    }
+
+    std::cout << "\nMatching Products:\n";
+    for (const auto& p : results) {
+        std::cout << "ID: " << p.getId()
+                  << " | Name: " << p.getName()
+                  << " | Qty: " << p.getQuantity()
+                  << " | Location: " << p.getLocation()
+                  << "\n";
+    }
+}
+
 int main() {
     ProductStore store;
     store.loadFromFile("data/products.csv");
@@ -95,7 +118,8 @@ int main() {
         std::cout << "2. Add Product\n";
         std::cout << "3. Delete Product\n";
         std::cout << "4. Edit Product\n";
-        std::cout << "5. Exit\n";
+        std::cout << "5. Search Product\n";
+        std::cout << "6. Exit\n";
         std::cout << "Choice: ";
 
         int choice;
@@ -115,6 +139,9 @@ int main() {
             editProduct(store);
         }
         else if (choice == 5) {
+            searchProduct(store);
+        }
+        else if (choice == 6) {
             break;
         }
         else {
