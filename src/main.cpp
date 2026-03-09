@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "productstore.h"
+#include "employeestore.h"
 
 void showProducts(const ProductStore& store) {
     const auto& products = store.list();
@@ -108,9 +109,97 @@ void searchProduct(const ProductStore& store) {
     }
 }
 
+void showEmployees(const EmployeeStore& store) {
+    const auto& employees = store.list();
+
+    if (employees.empty()) {
+        std::cout << "No employees found.\n";
+        return;
+    }
+
+    for (const auto& e : employees) {
+        std::cout << "ID: " << e.getId()
+                  << " | Name: " << e.getName()
+                  << "\n";
+    }
+}
+
+void addEmployee(EmployeeStore& store) {
+    std::string id, name;
+
+    std::cout << "Enter Employee ID: ";
+    std::getline(std::cin, id);
+
+    std::cout << "Enter Employee Name: ";
+    std::getline(std::cin, name);
+
+    Employee e(id, name);
+
+    if (!store.addEmployee(e)) {
+        std::cout << "Employee with this ID already exists.\n";
+    } else {
+        store.saveToFile("data/employees.csv");
+        std::cout << "Employee added successfully.\n";
+    }
+}
+
+void deleteEmployee(EmployeeStore& store) {
+    std::string id;
+
+    std::cout << "Enter Employee ID to delete: ";
+    std::getline(std::cin, id);
+
+    if (store.removeEmployee(id)) {
+        store.saveToFile("data/employees.csv");
+        std::cout << "Employee deleted successfully.\n";
+    } else {
+        std::cout << "Employee not found.\n";
+    }
+}
+
+void editEmployee(EmployeeStore& store) {
+    std::string id, name;
+
+    std::cout << "Enter Employee ID to edit: ";
+    std::getline(std::cin, id);
+
+    std::cout << "Enter New Employee Name: ";
+    std::getline(std::cin, name);
+
+    if (store.updateEmployee(id, name)) {
+        store.saveToFile("data/employees.csv");
+        std::cout << "Employee updated successfully.\n";
+    } else {
+        std::cout << "Employee not found.\n";
+    }
+}
+
+void searchEmployee(const EmployeeStore& store) {
+    std::string term;
+    std::cout << "Enter Employee ID or Name to search: ";
+    std::getline(std::cin, term);
+
+    std::vector<Employee> results = store.searchEmployees(term);
+
+    if (results.empty()) {
+        std::cout << "No matching employees found.\n";
+        return;
+    }
+
+    std::cout << "\nMatching Employees:\n";
+    for (const auto& e : results) {
+        std::cout << "ID: " << e.getId()
+                  << " | Name: " << e.getName()
+                  << "\n";
+    }
+}
+
 int main() {
     ProductStore store;
     store.loadFromFile("data/products.csv");
+
+    EmployeeStore employeeStore;
+    employeeStore.loadFromFile("data/employees.csv");
 
     while (true) {
         std::cout << "\nWarehouse Inventory System\n";
@@ -119,34 +208,30 @@ int main() {
         std::cout << "3. Delete Product\n";
         std::cout << "4. Edit Product\n";
         std::cout << "5. Search Product\n";
-        std::cout << "6. Exit\n";
+        std::cout << "6. View Employees\n";
+        std::cout << "7. Add Employee\n";
+        std::cout << "8. Delete Employee\n";
+        std::cout << "9. Edit Employee\n";
+        std::cout << "10. Search Employee\n";
+        std::cout << "11. Exit\n";
         std::cout << "Choice: ";
 
         int choice;
         std::cin >> choice;
         std::cin.ignore();
 
-        if (choice == 1) {
-            showProducts(store);
-        }
-        else if (choice == 2) {
-            addProduct(store);
-        }
-        else if (choice == 3) {
-            deleteProduct(store);
-        }
-        else if (choice == 4) {
-            editProduct(store);
-        }
-        else if (choice == 5) {
-            searchProduct(store);
-        }
-        else if (choice == 6) {
-            break;
-        }
-        else {
-            std::cout << "Invalid option.\n";
-        }
+        if (choice == 1) showProducts(store);
+        else if (choice == 2) addProduct(store);
+        else if (choice == 3) deleteProduct(store);
+        else if (choice == 4) editProduct(store);
+        else if (choice == 5) searchProduct(store);
+        else if (choice == 6) showEmployees(employeeStore);
+        else if (choice == 7) addEmployee(employeeStore);
+        else if (choice == 8) deleteEmployee(employeeStore);
+        else if (choice == 9) editEmployee(employeeStore);
+        else if (choice == 10) searchEmployee(employeeStore);
+        else if (choice == 11) break;
+        else std::cout << "Invalid option.\n";
     }
 
     return 0;
