@@ -280,22 +280,28 @@ int main() {
 
     while (true) {
         std::cout << "\nWarehouse Inventory System\n";
+
+        std::cout << "\nPRODUCTS\n";
         std::cout << "1. View Products\n";
         std::cout << "2. Add Product\n";
         std::cout << "3. Delete Product\n";
         std::cout << "4. Edit Product\n";
         std::cout << "5. Search Product\n";
+
+        std::cout << "\nEMPLOYEES\n";
         std::cout << "6. View Employees\n";
         std::cout << "7. Add Employee\n";
         std::cout << "8. Delete Employee\n";
         std::cout << "9. Edit Employee\n";
         std::cout << "10. Search Employee\n";
+
+        std::cout << "\nORDERS\n";
         std::cout << "11. View Orders\n";
         std::cout << "12. Create Order\n";
         std::cout << "13. Assign Order\n";
         std::cout << "14. Complete Order\n";
-        std::cout << "15. Exit\n";
-        std::cout << "Choice: ";
+
+        std::cout << "\n15. Exit\n";
 
         int choice;
         std::cin >> choice;
