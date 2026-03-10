@@ -3,6 +3,7 @@
 #include <vector>
 #include "productstore.h"
 #include "employeestore.h"
+#include "orderstore.h"
 
 void showProducts(const ProductStore& store) {
     const auto& products = store.list();
@@ -194,12 +195,88 @@ void searchEmployee(const EmployeeStore& store) {
     }
 }
 
+void showOrders(const OrderStore& store) {
+    const auto& orders = store.list();
+
+    if (orders.empty()) {
+        std::cout << "No orders found.\n";
+        return;
+    }
+
+    for (const auto& o : orders) {
+        std::cout << "OrderID: " << o.getOrderId()
+                  << " | ProductID: " << o.getProductId()
+                  << " | Qty: " << o.getQuantity()
+                  << " | Employee: " << o.getEmployeeId()
+                  << " | Status: " << o.getStatus()
+                  << "\n";
+    }
+}
+
+void createOrder(OrderStore& store) {
+    std::string orderId, productId;
+    int quantity;
+
+    std::cout << "Enter Order ID: ";
+    std::getline(std::cin, orderId);
+
+    std::cout << "Enter Product ID: ";
+    std::getline(std::cin, productId);
+
+    std::cout << "Enter Quantity: ";
+    std::cin >> quantity;
+    std::cin.ignore();
+
+    Order o(orderId, productId, quantity, "UNASSIGNED", "PENDING");
+
+    if (!store.addOrder(o)) {
+        std::cout << "Order with this ID already exists.\n";
+    } else {
+        store.saveToFile("data/orders.csv");
+        std::cout << "Order created successfully.\n";
+    }
+}
+
+void assignOrder(OrderStore& store) {
+    std::string orderId, employeeId;
+
+    std::cout << "Enter Order ID to assign: ";
+    std::getline(std::cin, orderId);
+
+    std::cout << "Enter Employee ID: ";
+    std::getline(std::cin, employeeId);
+
+    if (store.assignOrder(orderId, employeeId)) {
+        store.saveToFile("data/orders.csv");
+        std::cout << "Order assigned successfully.\n";
+    } else {
+        std::cout << "Order not found.\n";
+    }
+}
+
+void completeOrder(OrderStore& store) {
+    std::string orderId;
+
+    std::cout << "Enter Order ID to complete: ";
+    std::getline(std::cin, orderId);
+
+    if (store.completeOrder(orderId)) {
+        store.saveToFile("data/orders.csv");
+        std::cout << "Order completed.\n";
+    } else {
+        std::cout << "Order not found.\n";
+    }
+}
+
 int main() {
     ProductStore store;
     store.loadFromFile("data/products.csv");
 
     EmployeeStore employeeStore;
     employeeStore.loadFromFile("data/employees.csv");
+
+    OrderStore orderStore;
+    orderStore.loadFromFile("data/orders.csv");
 
     while (true) {
         std::cout << "\nWarehouse Inventory System\n";
@@ -213,7 +290,11 @@ int main() {
         std::cout << "8. Delete Employee\n";
         std::cout << "9. Edit Employee\n";
         std::cout << "10. Search Employee\n";
-        std::cout << "11. Exit\n";
+        std::cout << "11. View Orders\n";
+        std::cout << "12. Create Order\n";
+        std::cout << "13. Assign Order\n";
+        std::cout << "14. Complete Order\n";
+        std::cout << "15. Exit\n";
         std::cout << "Choice: ";
 
         int choice;
@@ -230,7 +311,11 @@ int main() {
         else if (choice == 8) deleteEmployee(employeeStore);
         else if (choice == 9) editEmployee(employeeStore);
         else if (choice == 10) searchEmployee(employeeStore);
-        else if (choice == 11) break;
+        else if (choice == 11) showOrders(orderStore);
+        else if (choice == 12) createOrder(orderStore);
+        else if (choice == 13) assignOrder(orderStore);
+        else if (choice == 14) completeOrder(orderStore);
+        else if (choice == 15) break;
         else std::cout << "Invalid option.\n";
     }
 
