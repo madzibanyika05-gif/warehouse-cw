@@ -237,6 +237,28 @@ void createOrder(OrderStore& store) {
     }
 }
 
+void editOrder(OrderStore& store) {
+    std::string orderId, productId;
+    int quantity;
+
+    std::cout << "Enter Order ID to edit: ";
+    std::getline(std::cin, orderId);
+
+    std::cout << "Enter New Product ID: ";
+    std::getline(std::cin, productId);
+
+    std::cout << "Enter New Quantity: ";
+    std::cin >> quantity;
+    std::cin.ignore();
+
+    if (store.updateOrder(orderId, productId, quantity)) {
+        store.saveToFile("data/orders.csv");
+        std::cout << "Order updated successfully.\n";
+    } else {
+        std::cout << "Order not found.\n";
+    }
+}
+
 void assignOrder(OrderStore& store) {
     std::string orderId, employeeId;
 
@@ -338,10 +360,11 @@ int main() {
         std::cout << "\nORDERS\n";
         std::cout << "11. View Orders\n";
         std::cout << "12. Create Order\n";
-        std::cout << "13. Assign Order\n";
-        std::cout << "14. Complete Order\n";
+        std::cout << "13. Edit Order\n";
+        std::cout << "14. Assign Order\n";
+        std::cout << "15. Complete Order\n";
 
-        std::cout << "\n15. Exit\n";
+        std::cout << "\n16. Exit\n";
 
         int choice;
         std::cin >> choice;
@@ -359,9 +382,10 @@ int main() {
         else if (choice == 10) searchEmployee(employeeStore);
         else if (choice == 11) showOrders(orderStore);
         else if (choice == 12) createOrder(orderStore);
-        else if (choice == 13) assignOrder(orderStore);
-        else if (choice == 14) completeOrder(orderStore, store);
-        else if (choice == 15) break;
+        else if (choice == 13) editOrder(orderStore);
+        else if (choice == 14) assignOrder(orderStore);
+        else if (choice == 15) completeOrder(orderStore, store);
+        else if (choice == 16) break;
         else std::cout << "Invalid option.\n";
     }
 
