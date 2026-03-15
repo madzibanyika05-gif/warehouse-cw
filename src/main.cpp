@@ -254,17 +254,57 @@ void assignOrder(OrderStore& store) {
     }
 }
 
-void completeOrder(OrderStore& store) {
+void completeOrder(OrderStore& store, ProductStore& productStore) {
     std::string orderId;
 
     std::cout << "Enter Order ID to complete: ";
     std::getline(std::cin, orderId);
 
+    // find the order first
+    const auto& orders = store.list();
+
+    std::string productId;
+    int orderQty = 0;
+    bool found = false;
+
+    for (const auto& o : orders) {
+        if (o.getOrderId() == orderId) {
+            productId = o.getProductId();
+            orderQty = o.getQuantity();
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        std::cout << "Order not found.\n";
+        return;
+    }
+
+    // find the product and reduce stock
+    const auto& products = productStore.list();
+
+    for (const auto& p : products) {
+        if (p.getId() == productId) {
+            int newQty = p.getQuantity() - orderQty;
+            if (newQty < 0) newQty = 0;
+
+            productStore.updateProduct(
+                p.getId(),
+                p.getName(),
+                newQty,
+                p.getLocation()
+            );
+
+            productStore.saveToFile("data/products.csv");
+            break;
+        }
+    }
+
+    // now mark order as completed
     if (store.completeOrder(orderId)) {
         store.saveToFile("data/orders.csv");
-        std::cout << "Order completed.\n";
-    } else {
-        std::cout << "Order not found.\n";
+        std::cout << "Order completed and stock updated.\n";
     }
 }
 
@@ -320,7 +360,7 @@ int main() {
         else if (choice == 11) showOrders(orderStore);
         else if (choice == 12) createOrder(orderStore);
         else if (choice == 13) assignOrder(orderStore);
-        else if (choice == 14) completeOrder(orderStore);
+        else if (choice == 14) completeOrder(orderStore, store);
         else if (choice == 15) break;
         else std::cout << "Invalid option.\n";
     }
