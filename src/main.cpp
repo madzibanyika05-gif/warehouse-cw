@@ -213,6 +213,30 @@ void showOrders(const OrderStore& store) {
     }
 }
 
+void viewAssignedOrders(const OrderStore& store) {
+    std::string employeeId;
+
+    std::cout << "Enter Employee ID to view assigned orders: ";
+    std::getline(std::cin, employeeId);
+
+    std::vector<Order> assignedOrders = store.getOrdersForEmployee(employeeId);
+
+    if (assignedOrders.empty()) {
+        std::cout << "No orders assigned to this employee.\n";
+        return;
+    }
+
+    std::cout << "\nAssigned Orders:\n";
+    for (const auto& o : assignedOrders) {
+        std::cout << "OrderID: " << o.getOrderId()
+                  << " | ProductID: " << o.getProductId()
+                  << " | Qty: " << o.getQuantity()
+                  << " | Employee: " << o.getEmployeeId()
+                  << " | Status: " << o.getStatus()
+                  << "\n";
+    }
+}
+
 void createOrder(OrderStore& store) {
     std::string orderId, productId;
     int quantity;
@@ -362,9 +386,10 @@ int main() {
         std::cout << "12. Create Order\n";
         std::cout << "13. Edit Order\n";
         std::cout << "14. Assign Order\n";
-        std::cout << "15. Complete Order\n";
+        std::cout << "15. View Assigned Orders\n";
+        std::cout << "16. Complete Order\n";
 
-        std::cout << "\n16. Exit\n";
+        std::cout << "\n17. Exit\n";
 
         int choice;
         std::cin >> choice;
@@ -384,8 +409,9 @@ int main() {
         else if (choice == 12) createOrder(orderStore);
         else if (choice == 13) editOrder(orderStore);
         else if (choice == 14) assignOrder(orderStore);
-        else if (choice == 15) completeOrder(orderStore, store);
-        else if (choice == 16) break;
+        else if (choice == 15) viewAssignedOrders(orderStore);
+        else if (choice == 16) completeOrder(orderStore, store);
+        else if (choice == 17) break;
         else std::cout << "Invalid option.\n";
     }
 
