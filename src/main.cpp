@@ -237,7 +237,7 @@ void viewAssignedOrders(const OrderStore& store) {
     }
 }
 
-void createOrder(OrderStore& store) {
+void createOrder(OrderStore& store, const ProductStore& productStore) {
     std::string orderId, productId;
     int quantity;
 
@@ -250,6 +250,30 @@ void createOrder(OrderStore& store) {
     std::cout << "Enter Quantity: ";
     std::cin >> quantity;
     std::cin.ignore();
+
+    bool productFound = false;
+    bool enoughStock = false;
+
+    for (const auto& p : productStore.list()) {
+        if (p.getId() == productId) {
+            productFound = true;
+
+            if (quantity > 0 && p.getQuantity() >= quantity) {
+                enoughStock = true;
+            }
+            break;
+        }
+    }
+
+    if (!productFound) {
+        std::cout << "Product not found.\n";
+        return;
+    }
+
+    if (!enoughStock) {
+        std::cout << "Not enough stock available for this order.\n";
+        return;
+    }
 
     Order o(orderId, productId, quantity, "UNASSIGNED", "PENDING");
 
@@ -406,7 +430,7 @@ int main() {
         else if (choice == 9) editEmployee(employeeStore);
         else if (choice == 10) searchEmployee(employeeStore);
         else if (choice == 11) showOrders(orderStore);
-        else if (choice == 12) createOrder(orderStore);
+        else if (choice == 12) createOrder(orderStore, store);
         else if (choice == 13) editOrder(orderStore);
         else if (choice == 14) assignOrder(orderStore);
         else if (choice == 15) viewAssignedOrders(orderStore);
