@@ -22,6 +22,34 @@ void showProducts(const ProductStore& store) {
     }
 }
 
+void showInventoryReport(const ProductStore& store) {
+    const auto& products = store.list();
+
+    if (products.empty()) {
+        std::cout << "No inventory data available.\n";
+        return;
+    }
+
+    int totalUnits = 0;
+
+    std::cout << "\nInventory Report\n";
+    std::cout << "---------------------------------------------\n";
+
+    for (const auto& p : products) {
+        std::cout << "ID: " << p.getId()
+                  << " -Name: " << p.getName()
+                  << " -Qty: " << p.getQuantity()
+                  << " -Location: " << p.getLocation()
+                  << "\n";
+
+        totalUnits += p.getQuantity();
+    }
+
+    std::cout << "---------------------------------------------\n";
+    std::cout << "Total product types: " << products.size() << "\n";
+    std::cout << "Total units in the stock: " << totalUnits << "\n";
+}
+
 void addProduct(ProductStore& store) {
     std::string id, name, location;
     int quantity;
@@ -307,7 +335,7 @@ void editOrder(OrderStore& store) {
     }
 }
 
-void assignOrder(OrderStore& store) {
+void assignOrder(OrderStore& store, const EmployeeStore& employeeStore) {
     std::string orderId, employeeId;
 
     std::cout << "Enter Order ID to assign: ";
@@ -315,6 +343,19 @@ void assignOrder(OrderStore& store) {
 
     std::cout << "Enter Employee ID: ";
     std::getline(std::cin, employeeId);
+
+    bool employeeFound = false;
+    for (const auto& e : employeeStore.list()) {
+        if (e.getId() == employeeId) {
+            employeeFound = true;
+            break;
+        }
+    }
+
+    if (!employeeFound) {
+        std::cout << "Employee not found.\n";
+        return;
+    }
 
     if (store.assignOrder(orderId, employeeId)) {
         store.saveToFile("data/orders.csv");
@@ -413,7 +454,10 @@ int main() {
         std::cout << "15. View Assigned Orders\n";
         std::cout << "16. Complete Order\n";
 
-        std::cout << "\n17. Exit\n";
+        std::cout << "\nREPORTS\n";
+        std::cout << "17. View Inventory Report\n";
+
+        std::cout << "\n18. Exit\n";
 
         int choice;
         std::cin >> choice;
@@ -432,10 +476,11 @@ int main() {
         else if (choice == 11) showOrders(orderStore);
         else if (choice == 12) createOrder(orderStore, store);
         else if (choice == 13) editOrder(orderStore);
-        else if (choice == 14) assignOrder(orderStore);
+        else if (choice == 14) assignOrder(orderStore, employeeStore);
         else if (choice == 15) viewAssignedOrders(orderStore);
         else if (choice == 16) completeOrder(orderStore, store);
-        else if (choice == 17) break;
+        else if (choice == 17) showInventoryReport(store);
+        else if (choice == 18) break;
         else std::cout << "Invalid option.\n";
     }
 
