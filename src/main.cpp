@@ -419,18 +419,9 @@ void completeOrder(OrderStore& store, ProductStore& productStore) {
     }
 }
 
-int main() {
-    ProductStore store;
-    store.loadFromFile("data/products.csv");
-
-    EmployeeStore employeeStore;
-    employeeStore.loadFromFile("data/employees.csv");
-
-    OrderStore orderStore;
-    orderStore.loadFromFile("data/orders.csv");
-
+void managerMenu(ProductStore& store, EmployeeStore& employeeStore, OrderStore& orderStore) {
     while (true) {
-        std::cout << "\nWarehouse Inventory System\n";
+        std::cout << "\nManager Menu\n";
 
         std::cout << "\nPRODUCTS\n";
         std::cout << "1. View Products\n";
@@ -451,15 +442,14 @@ int main() {
         std::cout << "12. Create Order\n";
         std::cout << "13. Edit Order\n";
         std::cout << "14. Assign Order\n";
-        std::cout << "15. View Assigned Orders\n";
-        std::cout << "16. Complete Order\n";
 
         std::cout << "\nREPORTS\n";
-        std::cout << "17. View Inventory Report\n";
+        std::cout << "15. View Inventory Report\n";
 
-        std::cout << "\n18. Exit\n";
+        std::cout << "\n16. Back to Main Role Menu\n";
 
         int choice;
+        std::cout << "Choice: ";
         std::cin >> choice;
         std::cin.ignore();
 
@@ -477,11 +467,68 @@ int main() {
         else if (choice == 12) createOrder(orderStore, store);
         else if (choice == 13) editOrder(orderStore);
         else if (choice == 14) assignOrder(orderStore, employeeStore);
-        else if (choice == 15) viewAssignedOrders(orderStore);
-        else if (choice == 16) completeOrder(orderStore, store);
-        else if (choice == 17) showInventoryReport(store);
-        else if (choice == 18) break;
+        else if (choice == 15) showInventoryReport(store);
+        else if (choice == 16) break;
         else std::cout << "Invalid option.\n";
+    }
+}
+
+void employeeMenu(const ProductStore& store, OrderStore& orderStore, ProductStore& mutableProductStore) {
+    while (true) {
+        std::cout << "\nEmployee Menu\n";
+
+        std::cout << "\nORDERS\n";
+        std::cout << "1. View Assigned Orders\n";
+        std::cout << "2. Complete Order\n";
+
+        std::cout << "\nPRODUCTS\n";
+        std::cout << "3. Search Product\n";
+
+        std::cout << "\n4. Back to Main Role Menu\n";
+
+        int choice;
+        std::cout << "Choice: ";
+        std::cin >> choice;
+        std::cin.ignore();
+
+        if (choice == 1) viewAssignedOrders(orderStore);
+        else if (choice == 2) completeOrder(orderStore, mutableProductStore);
+        else if (choice == 3) searchProduct(store);
+        else if (choice == 4) break;
+        else std::cout << "Invalid option.\n";
+    }
+}
+
+int main() {
+    ProductStore store;
+    store.loadFromFile("data/products.csv");
+
+    EmployeeStore employeeStore;
+    employeeStore.loadFromFile("data/employees.csv");
+
+    OrderStore orderStore;
+    orderStore.loadFromFile("data/orders.csv");
+
+    while (true) {
+        std::cout << "\nWarehouse Inventory System\n";
+        std::cout << "1. Manager Menu\n";
+        std::cout << "2. Employee Menu\n";
+        std::cout << "3. Exit\n";
+        std::cout << "Choice: ";
+
+        int roleChoice;
+        std::cin >> roleChoice;
+        std::cin.ignore();
+
+        if (roleChoice == 1) {
+            managerMenu(store, employeeStore, orderStore);
+        } else if (roleChoice == 2) {
+            employeeMenu(store, orderStore, store);
+        } else if (roleChoice == 3) {
+            break;
+        } else {
+            std::cout << "Invalid option.\n";
+        }
     }
 
     return 0;
