@@ -2,7 +2,7 @@
 #define EMPLOYEE_H
 
 #include <string>
-
+//header for employee class
 class Employee {
 private:
     std::string id;
@@ -11,8 +11,8 @@ private:
 public:
     Employee(const std::string& id, const std::string& name);
 
-    std::string getId() const;
-    std::string getName() const;
+    std::string getId() const;// get employee id
+    std::string getName() const; // get employee name
 
     void setName(const std::string& newName);
 };

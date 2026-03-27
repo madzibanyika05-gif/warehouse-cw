@@ -30,7 +30,7 @@ void showInventoryReport(const ProductStore& store) {
         return;
     }
 
-    int totalUnits = 0;
+    int totalUnits = 0; //keep trakc of total stock across all products
 
     std::cout << "\nInventory Report\n";
     std::cout << "---------------------------------------------\n";
@@ -116,11 +116,11 @@ void editProduct(ProductStore& store) {
     }
 }
 
-void searchProduct(const ProductStore& store) {
+void searchProduct(const ProductStore& store) {// search the product by ID or part name
     std::string term;
     std::cout << "Enter Product ID or Name to search: ";
     std::getline(std::cin, term);
-
+    //get matching prodcut from store
     std::vector<Product> results = store.searchProducts(term);
 
     if (results.empty()) {
@@ -203,7 +203,7 @@ void editEmployee(EmployeeStore& store) {
     }
 }
 
-void searchEmployee(const EmployeeStore& store) {
+void searchEmployee(const EmployeeStore& store) {//search employees by id or name
     std::string term;
     std::cout << "Enter Employee ID or Name to search: ";
     std::getline(std::cin, term);
@@ -279,7 +279,7 @@ void createOrder(OrderStore& store, const ProductStore& productStore) {
     std::cin >> quantity;
     std::cin.ignore();
 
-    bool productFound = false;
+    bool productFound = false;// check that product exists
     bool enoughStock = false;
 
     for (const auto& p : productStore.list()) {
@@ -343,7 +343,7 @@ void assignOrder(OrderStore& store, const EmployeeStore& employeeStore) {
 
     std::cout << "Enter Employee ID: ";
     std::getline(std::cin, employeeId);
-
+    //checking if empoloyee exits before giving order
     bool employeeFound = false;
     for (const auto& e : employeeStore.list()) {
         if (e.getId() == employeeId) {
@@ -392,7 +392,7 @@ void completeOrder(OrderStore& store, ProductStore& productStore) {
         return;
     }
 
-    // find the product and reduce stock
+    // then finds the product and reduce stock
     const auto& products = productStore.list();
 
     for (const auto& p : products) {
@@ -412,13 +412,13 @@ void completeOrder(OrderStore& store, ProductStore& productStore) {
         }
     }
 
-    // now mark order as completed
+    //now marks order as completed
     if (store.completeOrder(orderId)) {
         store.saveToFile("data/orders.csv");
         std::cout << "Order completed and stock updated.\n";
     }
 }
-
+// manager menu feature access
 void managerMenu(ProductStore& store, EmployeeStore& employeeStore, OrderStore& orderStore) {
     while (true) {
         std::cout << "\nManager Menu\n";
@@ -472,7 +472,7 @@ void managerMenu(ProductStore& store, EmployeeStore& employeeStore, OrderStore& 
         else std::cout << "Invalid option.\n";
     }
 }
-
+// employee menu feature access
 void employeeMenu(const ProductStore& store, OrderStore& orderStore, ProductStore& mutableProductStore) {
     while (true) {
         std::cout << "\nEmployee Menu\n";
@@ -500,6 +500,7 @@ void employeeMenu(const ProductStore& store, OrderStore& orderStore, ProductStor
 }
 
 int main() {
+    //loads data
     ProductStore store;
     store.loadFromFile("data/products.csv");
 
@@ -509,7 +510,7 @@ int main() {
     OrderStore orderStore;
     orderStore.loadFromFile("data/orders.csv");
 
-    while (true) {
+    while (true) {//user choses which role
         std::cout << "\nWarehouse Inventory System\n";
         std::cout << "1. Manager Menu\n";
         std::cout << "2. Employee Menu\n";

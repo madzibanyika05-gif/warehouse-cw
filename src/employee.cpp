@@ -1,5 +1,5 @@
 #include "employee.h"
-
+//class representing employee id and name
 Employee::Employee(const std::string& id, const std::string& name)
     : id(id), name(name) {}
 

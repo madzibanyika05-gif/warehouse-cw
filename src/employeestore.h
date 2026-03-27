@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include "employee.h"
-
+//class for handling stored employee data
 class EmployeeStore {
 private:
     std::vector<Employee> employees;

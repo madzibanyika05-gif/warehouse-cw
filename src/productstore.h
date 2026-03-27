@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include "product.h"
-
+//class for storing and handling product data
 class ProductStore {
 private:
     std::vector<Product> products;

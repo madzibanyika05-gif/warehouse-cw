@@ -1,7 +1,7 @@
 #include "employeestore.h"
 #include <fstream>
 #include <sstream>
-
+//managing collection of employees adding editing and removing 
 bool EmployeeStore::addEmployee(const Employee& e) {
     for (const auto& existing : employees) {
         if (existing.getId() == e.getId()) {
@@ -36,7 +36,7 @@ bool EmployeeStore::updateEmployee(const std::string& id, const std::string& nam
     return false;
 }
 
-std::vector<Employee> EmployeeStore::searchEmployees(const std::string& term) const {
+std::vector<Employee> EmployeeStore::searchEmployees(const std::string& term) const {//search function to find employee
     std::vector<Employee> matches;
 
     for (const auto& e : employees) {
@@ -67,7 +67,7 @@ void EmployeeStore::loadFromFile(const std::string& filename) {
         employees.emplace_back(id, name);
     }
 }
-
+// save data back to csv file
 void EmployeeStore::saveToFile(const std::string& filename) const {
     std::ofstream file(filename);
     if (!file.is_open()) return;

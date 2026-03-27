@@ -2,7 +2,7 @@
 #define ORDER_H
 
 #include <string>
-
+//responsible for system orders
 class Order {
 private:
     std::string orderId;
@@ -11,7 +11,7 @@ private:
     std::string employeeId;
     std::string status;
 
-public:
+public:// create new order and getting info
     Order(const std::string& orderId,
           const std::string& productId,
           int quantity,

@@ -1,7 +1,7 @@
 #include "orderstore.h"
 #include <fstream>
 #include <sstream>
-
+//adds new order but prevents duplicate id, responsible for add update and handling orders in files
 bool OrderStore::addOrder(const Order& o) {
     for (const auto& existing : orders) {
         if (existing.getOrderId() == o.getOrderId()) {
@@ -11,7 +11,7 @@ bool OrderStore::addOrder(const Order& o) {
     orders.push_back(o);
     return true;
 }
-
+//return all orders
 const std::vector<Order>& OrderStore::list() const {
     return orders;
 }
@@ -59,7 +59,7 @@ bool OrderStore::completeOrder(const std::string& orderId) {
     }
     return false;
 }
-
+// getting orders signed to specific eomployee
 std::vector<Order> OrderStore::getOrdersForEmployee(const std::string& employeeId) const {
     std::vector<Order> matches;
 
@@ -71,7 +71,7 @@ std::vector<Order> OrderStore::getOrdersForEmployee(const std::string& employeeI
 
     return matches;
 }
-
+//load order form csv
 void OrderStore::loadFromFile(const std::string& filename) {
     orders.clear();
 

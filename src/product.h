@@ -4,7 +4,7 @@
 #define PRODUCT_H
 
 #include <string>
-
+//product class to store product details
 class Product {
 private:
     std::string id;

@@ -1,5 +1,5 @@
 #include "order.h"
-
+//responsible for getting order details
 Order::Order(const std::string& orderId,
              const std::string& productId,
              int quantity,
@@ -11,15 +11,15 @@ Order::Order(const std::string& orderId,
       employeeId(employeeId),
       status(status) {}
 
-std::string Order::getOrderId() const {
+std::string Order::getOrderId() const {// returns order id
     return orderId;
 }
 
-std::string Order::getProductId() const {
+std::string Order::getProductId() const {// return product id
     return productId;
 }
 
-int Order::getQuantity() const {
+int Order::getQuantity() const {// returns amount
     return quantity;
 }
 

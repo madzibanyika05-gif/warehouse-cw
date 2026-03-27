@@ -1,5 +1,5 @@
 #include "product.h"
-
+//represents a product with id name quantity and location
 Product::Product(const std::string& id,
                  const std::string& name,
                  int quantity,

@@ -1,9 +1,9 @@
 #include "productstore.h"
 #include <fstream>
 #include <sstream>
-
+//manages all products add, update, search and file handling
 bool ProductStore::addProduct(const Product& p) {
-    // Prevent duplicate IDs
+    
     for (const auto& existing : products) {
         if (existing.getId() == p.getId()) {
             return false;
@@ -40,7 +40,7 @@ bool ProductStore::updateProduct(const std::string& id,
     return false;
 }
 
-std::vector<Product> ProductStore::searchProducts(const std::string& term) const {
+std::vector<Product> ProductStore::searchProducts(const std::string& term) const {//search function
     std::vector<Product> matches;
 
     for (const auto& p : products) {
@@ -74,11 +74,11 @@ void ProductStore::loadFromFile(const std::string& filename) {
             int quantity = std::stoi(quantityStr);
             products.emplace_back(id, name, quantity, location);
         } catch (...) {
-            // Skip malformed lines
+            
         }
     }
 }
-
+// saves products to csv
 void ProductStore::saveToFile(const std::string& filename) const {
     std::ofstream file(filename);
     if (!file.is_open()) return;

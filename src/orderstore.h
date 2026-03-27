@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include "order.h"
-
+//class responsible for storing order data
 class OrderStore {
 private:
     std::vector<Order> orders;
